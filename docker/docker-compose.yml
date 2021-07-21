@@ -1,0 +1,85 @@
+version: '3.8'
+services:
+
+  bookmark-svc-db:
+    image: postgres:12.3
+    environment:
+      - POSTGRES_USER=siva
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=appdb
+    ports:
+      - "5433:5432"
+
+  bookmark-service:
+    build: ../bookmark-service
+    ports:
+      - "18081:8081"
+    restart: always
+    depends_on:
+      - bookmark-svc-db
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_DATASOURCE_URL: jdbc:postgresql://bookmark-svc-db:5432/appdb
+      SPRING_DATASOURCE_USERNAME: siva
+      SPRING_DATASOURCE_PASSWORD: secret
+      SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
+      APPLICATION_VOTE_SERVICE_URL: http://vote-service:8082
+      APPLICATION_LOGSTASH_HOST: logstash
+
+  vote-svc-db:
+    image: postgres:12.3
+    environment:
+      - POSTGRES_USER=siva
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=appdb
+    ports:
+      - "5434:5432"
+
+  vote-service:
+    build: ../vote-service
+    ports:
+      - "18082:8082"
+    restart: always
+    depends_on:
+      - vote-svc-db
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_DATASOURCE_URL: jdbc:postgresql://vote-svc-db:5432/appdb
+      SPRING_DATASOURCE_USERNAME: siva
+      SPRING_DATASOURCE_PASSWORD: secret
+      SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
+      APPLICATION_LOGSTASH_HOST: logstash
+
+  bookmarks-ui:
+    build: ../bookmarks-ui
+    ports:
+      - "18080:8080"
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      #APPLICATION_BOOKMARK_SERVICE_URL: http://bookmark-service:8081
+      #APPLICATION_VOTE_SERVICE_URL: http://vote-service:8082
+      APPLICATION_BOOKMARK_SERVICE_URL: http://localhost:18081
+      APPLICATION_VOTE_SERVICE_URL: http://localhost:18082
+      SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
+      APPLICATION_LOGSTASH_HOST: logstash
+    depends_on:
+      - bookmark-service
+      - vote-service
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    # Environment settings are defined here https://github.com/openzipkin/zipkin/tree/1.19.0/zipkin-server#environment-variables
+    environment:
+      - STORAGE_TYPE=mem
+      # Uncomment to disable scribe
+      # - SCRIBE_ENABLED=false
+      # Uncomment to enable self-tracing
+      # - SELF_TRACING_ENABLED=true
+      # Uncomment to enable debug logging
+      # - JAVA_OPTS=-Dlogging.level.zipkin=DEBUG
+    ports:
+      # Port used for the Zipkin UI and HTTP Api
+      - 9411:9411
