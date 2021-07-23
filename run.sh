@@ -44,28 +44,25 @@ function monitoring() {
 function monitoring_stop() {
     echo 'Stopping Prometheus, Grafana....'
     docker-compose -f ${dc_monitoring} stop
-    #docker-compose -f ${dc_monitoring} rm -f
+    docker-compose -f ${dc_monitoring} rm -f
 }
 
+function perf_test() {
+    ./mvnw gatling:test -pl bookmarks-gatling-tests
+}
 function build_api() {
     ./mvnw clean package -DskipTests
 }
 
 function buildImages() {
-    ./mvnw spring-boot:build-image -pl vote-service
     ./mvnw spring-boot:build-image -pl bookmark-service
-    ./mvnw spring-boot:build-image -pl bookmarks-ui
 }
 
 function pushImages() {
     buildImages
     #docker tag sivaprasadreddy/bookmark-service sivaprasadreddy/bookmark-service:v2
-    #docker tag sivaprasadreddy/vote-service sivaprasadreddy/vote-service:v2
-    #docker tag sivaprasadreddy/bookmarks-ui sivaprasadreddy/bookmarks-ui:v2
-
     docker push sivaprasadreddy/bookmark-service
-    docker push sivaprasadreddy/vote-service
-    docker push sivaprasadreddy/bookmarks-ui
+
 }
 
 action="start"

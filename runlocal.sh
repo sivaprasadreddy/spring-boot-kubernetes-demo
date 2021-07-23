@@ -13,9 +13,10 @@ function build_api() {
 function start() {
   build_api
   profiles="dev"
+  vmargs=""
   #vmargs="-Xlog:gc*=debug:stdout -Xlog:gc*=debug:file=gc.log"
   #vmargs="-Xlog:gc*=debug:file=gc.log"
-  vmargs="-javaagent:/Users/ksivaprasadreddy/Apps/newrelic/newrelic.jar"
+  # vmargs="-javaagent:/Users/ksivaprasadreddy/Apps/newrelic/newrelic.jar"
   if [[ "$1" != ""  ]]
   then
       profiles="$1"

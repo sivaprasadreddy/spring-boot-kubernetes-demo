@@ -28,23 +28,9 @@ scrape_configs:
   static_configs:
   - targets: ['localhost:9090']
 
-- job_name: 'vote-service'
-
-  metrics_path: '/actuator/prometheus'
-  scrape_interval: 5s
-  static_configs:
-  - targets: ['vote-service:8082']
-
 - job_name: 'bookmark-service'
 
   metrics_path: '/actuator/prometheus'
   scrape_interval: 5s
   static_configs:
   - targets: ['bookmark-service:8080']
-
-- job_name: 'bookmarks-ui'
-
-  metrics_path: '/actuator/prometheus'
-  scrape_interval: 5s
-  static_configs:
-    - targets: ['bookmarks-ui:8080']
