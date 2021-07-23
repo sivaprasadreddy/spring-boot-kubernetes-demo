@@ -40,6 +40,10 @@ public class Bookmark {
     @NotEmpty(message = "URL cannot be empty")
     private String url;
 
+    @Column private Integer upVotes = 0;
+
+    @Column private Integer downVotes = 0;
+
     @Column(updatable = false)
     private LocalDateTime createdAt;
 

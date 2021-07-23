@@ -1,7 +1,6 @@
 package com.sivalabs.bookmarks.web;
 
 import com.sivalabs.bookmarks.domain.Bookmark;
-import com.sivalabs.bookmarks.domain.BookmarkVotes;
 import java.time.LocalDateTime;
 import lombok.Data;
 
@@ -15,17 +14,15 @@ public class BookmarkDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static BookmarkDTO toBookmarkDTO(Bookmark bookmark, BookmarkVotes votes) {
+    public static BookmarkDTO toBookmarkDTO(Bookmark bookmark) {
         BookmarkDTO dto = new BookmarkDTO();
         dto.setId(bookmark.getId());
         dto.setTitle(bookmark.getTitle());
         dto.setUrl(bookmark.getUrl());
         dto.setCreatedAt(bookmark.getCreatedAt());
         dto.setUpdatedAt(bookmark.getUpdatedAt());
-        if (votes != null) {
-            dto.setUpVotes(votes.getUpVotes());
-            dto.setDownVotes(votes.getDownVotes());
-        }
+        dto.setUpVotes(bookmark.getUpVotes());
+        dto.setDownVotes(bookmark.getDownVotes());
         return dto;
     }
 }

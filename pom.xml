@@ -10,9 +10,8 @@
     <name>spring-boot-monitoring</name>
 
     <modules>
-        <module>vote-service</module>
         <module>bookmark-service</module>
-        <module>bookmarks-ui</module>
+        <module>bookmarks-gatling-tests</module>
     </modules>
 
 </project>
