@@ -18,12 +18,12 @@ class BookmarksSimulation extends Simulation {
 
   // Now, we can write the scenario as a composition
   val scnBrowseBookmarks = scenario("Browse Bookmarks")
-    .during(3.minutes, "Counter") {
+    .during(10.minutes, "Counter") {
       exec(Browse.bookmarks).pause(2)
     }
 
     val scnCreateBookmark = scenario("Create Bookmark")
-        .during(3.minutes, "Counter") {
+        .during(10.minutes, "Counter") {
             exec(Bookmarks.create).pause(2)
         }
 

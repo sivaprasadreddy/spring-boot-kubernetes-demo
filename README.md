@@ -16,6 +16,7 @@ A sample application to demonstrate monitoring SpringBoot applications using Pro
 
 ## Important URLs:
 * Actuator: http://localhost:8080/actuator
+* Swagger UI: http://localhost:8080/swagger-ui/index.html
 * Postgresql: `jdbc:postgresql://localhost:5432/appdb`, credentials: `siva/secret`
 * Zipkin: http://localhost:9411
 * Prometheus: http://localhost:9090

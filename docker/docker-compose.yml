@@ -13,18 +13,19 @@ services:
   bookmark-service:
     build: ../bookmark-service
     ports:
-      - "18080:8080"
+      - "8080:8080"
     restart: always
     depends_on:
       - bookmark-svc-db
     environment:
-      SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
-      SPRING_DATASOURCE_URL: jdbc:postgresql://bookmark-svc-db:5432/appdb
-      SPRING_DATASOURCE_USERNAME: siva
-      SPRING_DATASOURCE_PASSWORD: secret
-      SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
-      APPLICATION_LOGSTASH_HOST: logstash
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://bookmark-svc-db:5432/appdb
+      - SPRING_DATASOURCE_USERNAME=siva
+      - SPRING_DATASOURCE_PASSWORD=secret
+      - SPRING_ZIPKIN_ENABLED=true
+      - SPRING_ZIPKIN_BASE_URL=http://zipkin:9411/
+      - APPLICATION_LOGSTASH_HOST=logstash
 
   zipkin:
     image: openzipkin/zipkin
