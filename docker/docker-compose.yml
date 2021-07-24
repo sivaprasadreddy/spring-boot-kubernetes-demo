@@ -26,6 +26,9 @@ services:
       - SPRING_ZIPKIN_ENABLED=true
       - SPRING_ZIPKIN_BASE_URL=http://zipkin:9411/
       - APPLICATION_LOGSTASH_HOST=logstash
+    labels:
+      collect_logs_with_filebeat: "true"
+      decode_log_event_to_json_object: "true"
 
   zipkin:
     image: openzipkin/zipkin

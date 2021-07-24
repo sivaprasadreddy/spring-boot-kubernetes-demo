@@ -7,10 +7,10 @@ services:
     environment:
       - node.name=elasticsearch
       - cluster.name=es-docker-cluster
-      - cluster.initial_master_nodes=elasticsearch
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
       - xpack.security.enabled=false
+      - discovery.type=single-node
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     volumes:
       - esdata1:/usr/share/elasticsearch/data
@@ -30,8 +30,20 @@ services:
       - ./elk:/etc/logstash/conf.d
     ports:
       - "5000:5000"
+      - "5044:5044"
     links:
       - elasticsearch
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:7.13.3
+    volumes:
+      - ./filebeat/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro # Configuration file
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro           # Docker logs
+      - /var/run/docker.sock:/var/run/docker.sock:ro                       # Additional information about containers
+      - ./filebeat/data:/usr/share/filebeat/data:rw                        # Persistence data
+    user: root                                                             # Allow access to log files and docker.sock
+    restart: on-failure
+
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.13.3

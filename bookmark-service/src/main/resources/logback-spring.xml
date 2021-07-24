@@ -1,56 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration debug="false">
-    <springProperty defaultValue="localhost" name="logstashHost"
-                    scope="context" source="application.logstash-host"/>
+<configuration>
 
-    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
+    <springProperty scope="context" name="application_name" source="spring.application.name"/>
+
+    <!-- Log configuration for Docker profile -->
     <springProfile name="docker">
-        <appender class="net.logstash.logback.appender.LogstashTcpSocketAppender" name="stash">
-            <!--<destination>localhost:5000</destination>-->
-            <destination>${logstashHost}:5000</destination>
 
+        <appender name="jsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
             <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
                 <providers>
-                    <mdc/> <!-- MDC variables on the Thread will be written as JSON fields-->
-                    <context/> <!--Outputs entries from logback's context -->
-                    <version/> <!-- Logstash json format version, the @version field in the output-->
+                    <timestamp>
+                        <timeZone>UTC</timeZone>
+                    </timestamp>
+                    <version/>
                     <logLevel/>
+                    <message/>
                     <loggerName/>
-
+                    <threadName/>
+                    <context/>
                     <pattern>
+
                         <pattern>
                             {
-                            <!-- we can add some custom fields to be sent with all the log entries.-->
-                            <!--make filtering easier in Logstash-->
-                            "app-name": "bookmark-service",
-                            "app-version": "1.0"
+                            "trace": {
+                            "trace_id": "%mdc{X-B3-TraceId}",
+                            "span_id": "%mdc{X-B3-SpanId}",
+                            "parent_span_id": "%mdc{X-B3-ParentSpanId}",
+                            "exportable": "%mdc{X-Span-Export}"
+                            }
                             }
                         </pattern>
                     </pattern>
-
-                    <threadName/>
-                    <message/>
-
-                    <logstashMarkers/> <!-- Useful so we can add extra information for specific log lines as Markers-->
-                    <arguments/> <!--or through StructuredArguments-->
-
+                    <mdc>
+                        <excludeMdcKeyName>traceId</excludeMdcKeyName>
+                        <excludeMdcKeyName>spanId</excludeMdcKeyName>
+                        <excludeMdcKeyName>parentId</excludeMdcKeyName>
+                        <excludeMdcKeyName>spanExportable</excludeMdcKeyName>
+                        <excludeMdcKeyName>X-B3-TraceId</excludeMdcKeyName>
+                        <excludeMdcKeyName>X-B3-SpanId</excludeMdcKeyName>
+                        <excludeMdcKeyName>X-B3-ParentSpanId</excludeMdcKeyName>
+                        <excludeMdcKeyName>X-Span-Export</excludeMdcKeyName>
+                    </mdc>
                     <stackTrace/>
                 </providers>
             </encoder>
         </appender>
+
         <root level="INFO">
-            <appender-ref ref="CONSOLE"/>
-            <appender-ref ref="stash"/>
+            <appender-ref ref="jsonConsoleAppender"/>
         </root>
+
     </springProfile>
+
+    <!-- Log configuration for non-Docker profile -->
     <springProfile name="!docker">
+
+        <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
         <root level="INFO">
-            <appender-ref ref="CONSOLE"/>
-            <appender-ref ref="FILE"/>
+            <appender-ref ref="CONSOLE" />
         </root>
     </springProfile>
 
-    <logger level="INFO" name="org.springframework"/>
-    <logger level="DEBUG" name="com.sivalabs"/>
 </configuration>

@@ -33,6 +33,7 @@ public class BookmarkController {
     @GetMapping
     public BookmarksDTO getBookmarks(@RequestParam(name = "page", defaultValue = "1") Integer page) {
         int pageNo = (page > 0)? page - 1 : 0;
+        log.info("Getting bookmarks for page: {}", pageNo);
         Sort sort = Sort.by(Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(pageNo, SIZE, sort);
         return new BookmarksDTO(bookmarkRepository.findAll(pageable));
