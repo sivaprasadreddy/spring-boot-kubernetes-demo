@@ -82,4 +82,4 @@ services:
       # - JAVA_OPTS=-Dlogging.level.zipkin=DEBUG
     ports:
       # Port used for the Zipkin UI and HTTP Api
-      - 9411:9411
+      - "9411:9411"

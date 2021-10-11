@@ -6,21 +6,22 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.8</version>
+        <version>2.5.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.sivalabs</groupId>
     <artifactId>bookmark-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>bookmark-service</name>
     <description>Bookmark Service</description>
     <properties>
         <java.version>11</java.version>
         <spring-cloud.version>2020.0.3</spring-cloud.version>
-        <testcontainers.version>1.15.1</testcontainers.version>
+        <testcontainers.version>1.16.0</testcontainers.version>
         <springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
         <logstash_logback_encoder.version>5.2</logstash_logback_encoder.version>
         <spotless.version>2.7.0</spotless.version>
+        <jib-maven-plugin.version>3.1.4</jib-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
         <jacoco.minimum.coverage>0.80</jacoco.minimum.coverage>
         <jacoco.utReportFolder>${project.build.directory}/jacoco/test</jacoco.utReportFolder>
@@ -144,7 +145,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <imageName>${dockerhub.username}/${project.artifactId}</imageName>
+                    <imageName>${dockerhub.username}/${project.artifactId}:${project.version}</imageName>
                     <pullPolicy>IF_NOT_PRESENT</pullPolicy>
                     <excludes>
                         <exclude>
@@ -316,6 +317,28 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>${jib-maven-plugin.version}</version>
+                <configuration>
+                    <from>
+                        <!--<image>gcr.io/distroless/java:11</image>-->
+                        <image>openjdk:11-jdk-slim</image>
+                    </from>
+                    <to>
+                        <image>${dockerhub.username}/${project.artifactId}</image>
+                        <tags>
+                            <tag>${project.version}</tag>
+                        </tags>
+                    </to>
+                    <container>
+                        <ports>
+                            <port>8081</port>
+                        </ports>
+                    </container>
+                </configuration>
             </plugin>
         </plugins>
     </build>
