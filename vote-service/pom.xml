@@ -145,7 +145,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <imageName>${dockerhub.username}/${project.artifactId}:${project.version}</imageName>
+                    <imageName>${dockerhub.username}/${project.artifactId}</imageName>
                     <pullPolicy>IF_NOT_PRESENT</pullPolicy>
                     <excludes>
                         <exclude>
@@ -330,6 +330,7 @@
                     <to>
                         <image>${dockerhub.username}/${project.artifactId}</image>
                         <tags>
+                            <tag>latest</tag>
                             <tag>${project.version}</tag>
                         </tags>
                     </to>

@@ -87,9 +87,9 @@ function k8sUndeploy() {
 function pushImages() {
     buildImages
 
-    docker tag sivaprasadreddy/bookmark-service:${project_version} sivaprasadreddy/bookmark-service:latest
-    docker tag sivaprasadreddy/vote-service:${project_version} sivaprasadreddy/vote-service:latest
-    docker tag sivaprasadreddy/bookmarks-ui:${project_version} sivaprasadreddy/bookmarks-ui:latest
+    docker tag sivaprasadreddy/bookmark-service sivaprasadreddy/bookmark-service:${project_version}
+    docker tag sivaprasadreddy/vote-service sivaprasadreddy/vote-service:${project_version}
+    docker tag sivaprasadreddy/bookmarks-ui sivaprasadreddy/bookmarks-ui:${project_version}
 
     docker push sivaprasadreddy/bookmark-service
     docker push sivaprasadreddy/vote-service
