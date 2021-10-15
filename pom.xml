@@ -12,6 +12,7 @@
     <modules>
         <module>vote-service</module>
         <module>bookmark-service</module>
+        <module>api-gateway</module>
         <module>bookmarks-ui</module>
     </modules>
 

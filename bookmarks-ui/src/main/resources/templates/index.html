@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns="http://www.w3.org/1999/xhtml">
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -80,7 +81,13 @@
         <p class="text-center">SivaLabs &copy; 2021</p>
     </div>
 </footer>
-
+<script th:inline="javascript">
+    let apiBaseUrl = '[(${apiBaseUrl})]';
+    let apiBaseUrlOverride = localStorage.getItem("API_BASE_URL");
+    if(apiBaseUrlOverride) {
+        apiBaseUrl = apiBaseUrlOverride;
+    }
+</script>
 <script src="/webjars/jquery/3.5.1/jquery.js"></script>
 <script src="/webjars/popper.js/1.16.0/umd/popper.js"></script>
 <script src="/webjars/bootstrap/4.5.3/js/bootstrap.js"></script>

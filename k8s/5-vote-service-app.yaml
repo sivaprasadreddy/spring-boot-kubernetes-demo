@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
         - name: vote-service
-          image: sivaprasadreddy/vote-service:0.0.1
+          image: sivaprasadreddy/vote-service:latest
           ports:
             - containerPort: 8082
           env:
@@ -64,10 +64,12 @@ spec:
             httpGet:
               path: /actuator/health/liveness
               port: 8082
+            initialDelaySeconds: 10
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
               port: 8082
+            initialDelaySeconds: 10
           lifecycle:
             preStop:
               exec:

@@ -23,6 +23,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://bookmark-svc-db:5432/appdb
       SPRING_DATASOURCE_USERNAME: siva
       SPRING_DATASOURCE_PASSWORD: secret
+      SPRING_ZIPKIN_ENABLED: true
       SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
       APPLICATION_VOTE_SERVICE_URL: http://vote-service:8082
       APPLICATION_LOGSTASH_HOST: logstash
@@ -49,6 +50,21 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://vote-svc-db:5432/appdb
       SPRING_DATASOURCE_USERNAME: siva
       SPRING_DATASOURCE_PASSWORD: secret
+      SPRING_ZIPKIN_ENABLED: true
+      SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
+      APPLICATION_LOGSTASH_HOST: logstash
+
+  api-gateway:
+    build: ../api-gateway
+    ports:
+      - "19090:9090"
+    restart: always
+    depends_on:
+      - bookmark-service
+      - vote-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_ZIPKIN_ENABLED: true
       SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
       APPLICATION_LOGSTASH_HOST: logstash
 
@@ -59,15 +75,12 @@ services:
     restart: always
     environment:
       SPRING_PROFILES_ACTIVE: docker
-      #APPLICATION_BOOKMARK_SERVICE_URL: http://bookmark-service:8081
-      #APPLICATION_VOTE_SERVICE_URL: http://vote-service:8082
-      APPLICATION_BOOKMARK_SERVICE_URL: http://localhost:18081
-      APPLICATION_VOTE_SERVICE_URL: http://localhost:18082
+      SPRING_ZIPKIN_ENABLED: true
       SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
       APPLICATION_LOGSTASH_HOST: logstash
+      APPLICATION_API_BASE_URL: http://api-gateway:9090
     depends_on:
-      - bookmark-service
-      - vote-service
+      - api-gateway
   zipkin:
     image: openzipkin/zipkin
     container_name: zipkin

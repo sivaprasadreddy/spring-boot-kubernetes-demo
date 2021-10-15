@@ -44,7 +44,9 @@ jobs:
         run: |
           ./mvnw spring-boot:build-image -pl vote-service
           ./mvnw spring-boot:build-image -pl bookmark-service
+          ./mvnw spring-boot:build-image -pl api-gateway
           ./mvnw spring-boot:build-image -pl bookmarks-ui
           docker push ${{ secrets.DOCKER_USER }}/vote-service
           docker push ${{ secrets.DOCKER_USER }}/bookmark-service
+          docker push ${{ secrets.DOCKER_USER }}/api-gateway
           docker push ${{ secrets.DOCKER_USER }}/bookmarks-ui
