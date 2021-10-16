@@ -80,20 +80,24 @@ function pushImages() {
 
 function k8sDeploy() {
     kubectl apply -f k8s/1-config.yaml
+    sleep 3
     kubectl apply -f k8s/2-bookmarks-postgresdb.yaml
-    sleep 5
+    sleep 3
     kubectl apply -f k8s/3-votes-postgresdb.yaml
-    sleep 5
+    sleep 3
     kubectl apply -f k8s/4-bookmark-service-app.yaml
-    sleep 5
+    sleep 3
     kubectl apply -f k8s/5-vote-service-app.yaml
-    sleep 5
+    sleep 3
     kubectl apply -f k8s/6-api-gateway.yaml
-    sleep 5
+    sleep 3
     kubectl apply -f k8s/7-bookmarks-ui-app.yaml
+    sleep 3
+    kubectl apply -f k8s/8-ingress.yaml
 }
 
 function k8sUndeploy() {
+    kubectl delete -f k8s/8-ingress.yaml
     kubectl delete -f k8s/7-bookmarks-ui-app.yaml
     kubectl delete -f k8s/6-api-gateway.yaml
     kubectl delete -f k8s/5-vote-service-app.yaml
