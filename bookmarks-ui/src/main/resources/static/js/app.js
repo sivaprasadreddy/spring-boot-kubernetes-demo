@@ -11,7 +11,7 @@ new Vue({
   methods: {
     loadBookmarks() {
       let self = this;
-      $.getJSON(apiBaseUrl+"/bookmarkssvc/api/v1/bookmarks", function (data) {
+      $.getJSON(apiBaseUrl+"/bookmarks/api/v1/bookmarks", function (data) {
         self.bookmarks = data
         self.error = null;
       }).fail(function (err){
@@ -25,7 +25,7 @@ new Vue({
 
       $.ajax({
         type: "POST",
-        url: apiBaseUrl+'/bookmarkssvc/api/v1/bookmarks',
+        url: apiBaseUrl+'/bookmarks/api/v1/bookmarks',
         data: JSON.stringify(this.newBookmark),
         contentType: "application/json",
         success: function () {
@@ -44,7 +44,7 @@ new Vue({
       console.log('up vote:' + bookmarkId);
       $.ajax({
         type: "PUT",
-        url: apiBaseUrl+'/votessvc/api/v1/bookmarks/' + bookmarkId + '/votes/up',
+        url: apiBaseUrl+'/votes/api/v1/bookmarks/' + bookmarkId + '/votes/up',
         contentType: "application/json",
         success: function () {
           self.error = null;
@@ -61,7 +61,7 @@ new Vue({
       console.log('down vote:' + bookmarkId);
       $.ajax({
         type: "PUT",
-        url: apiBaseUrl+'/votessvc/api/v1/bookmarks/' + bookmarkId + '/votes/down',
+        url: apiBaseUrl+'/votes/api/v1/bookmarks/' + bookmarkId + '/votes/down',
         contentType: "application/json",
         success: function () {
           self.error = null;

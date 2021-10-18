@@ -9,18 +9,29 @@ spring:
     enabled: false
   sleuth.sampler.probability: 1
   cloud.gateway.routes:
-        - id: bookmarks_route
+        - id: bookmarks-service
           uri: http://localhost:8081
           predicates:
-            - Path=/bookmarkssvc/**
+            - Path=/bookmarks/**
           filters:
-            - StripPrefix=1
-        - id: votes_route
+            - RewritePath=/bookmarks/(?<path>.*), /$\{path}
+        - id: votes-service
           uri: http://localhost:8082
           predicates:
-            - Path=/votessvc/**
+            - Path=/votes/**
           filters:
-            - StripPrefix=1
+            - RewritePath=/votes/(?<path>.*), /$\{path}
+        - id: openapi
+          uri: http://localhost:${server.port}
+          predicates:
+            - Path=/v3/api-docs/**
+          filters:
+            - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
 management:
   endpoint:
     health:
