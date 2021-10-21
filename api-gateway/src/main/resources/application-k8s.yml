@@ -2,15 +2,31 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: bookmarks_route
-          uri: http://bookmark-service-svc:8081
+        - id: bookmarks-service
+          uri: http://BOOKMARKS-SERVICE
           predicates:
-            - Path=/bookmarkssvc/**
+            - Path=/bookmarks/**
           filters:
-            - StripPrefix=1
-        - id: votes_route
-          uri: http://vote-service-svc:8082
+            - RewritePath=/bookmarks/(?<path>.*), /$\{path}
+        - id: votes-service
+          uri: http://VOTES-SERVICE
           predicates:
-            - Path=/votessvc/**
+            - Path=/votes/**
           filters:
-            - StripPrefix=1
+            - RewritePath=/votes/(?<path>.*), /$\{path}
+        - id: openapi
+          uri: http://localhost:${server.port}
+          predicates:
+            - Path=/v3/api-docs/**
+          filters:
+            - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://service-registry-svc:8761/eureka/
+    initialInstanceInfoReplicationIntervalSeconds: 5
+    registryFetchIntervalSeconds: 5
+    enabled: true
+  instance:
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5

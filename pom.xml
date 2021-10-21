@@ -5,13 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.sivalabs</groupId>
     <artifactId>spring-boot-kubernetes-demo</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <packaging>pom</packaging>
     <name>spring-boot-kubernetes-demo</name>
 
     <modules>
-        <module>vote-service</module>
-        <module>bookmark-service</module>
+        <module>votes-service</module>
+        <module>bookmarks-service</module>
+        <module>service-registry</module>
         <module>api-gateway</module>
         <module>bookmarks-ui</module>
     </modules>

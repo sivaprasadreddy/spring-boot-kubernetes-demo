@@ -10,13 +10,13 @@ spring:
   sleuth.sampler.probability: 1
   cloud.gateway.routes:
         - id: bookmarks-service
-          uri: http://localhost:8081
+          uri: lb://BOOKMARKS-SERVICE
           predicates:
             - Path=/bookmarks/**
           filters:
             - RewritePath=/bookmarks/(?<path>.*), /$\{path}
         - id: votes-service
-          uri: http://localhost:8082
+          uri: lb://VOTES-SERVICE
           predicates:
             - Path=/votes/**
           filters:
@@ -41,3 +41,8 @@ management:
     web:
       exposure:
         include: '*'
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    enabled: true

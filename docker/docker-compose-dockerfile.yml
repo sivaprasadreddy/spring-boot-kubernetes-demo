@@ -1,0 +1,104 @@
+version: '3.8'
+services:
+
+  bookmark-svc-db:
+    image: postgres:12.3
+    environment:
+      - POSTGRES_USER=siva
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=appdb
+    ports:
+      - "5433:5432"
+
+  bookmarks-service:
+    build: ../bookmarks-service
+    ports:
+      - "18081:8081"
+    restart: always
+    depends_on:
+      - bookmark-svc-db
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_DATASOURCE_URL: jdbc:postgresql://bookmark-svc-db:5432/appdb
+      SPRING_DATASOURCE_USERNAME: siva
+      SPRING_DATASOURCE_PASSWORD: secret
+      SPRING_ZIPKIN_ENABLED: true
+      SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
+      APPLICATION_VOTE_SERVICE_URL: http://votes-service:8082
+      APPLICATION_LOGSTASH_HOST: logstash
+      EUREKA_CLIENT_SERVICEURL_DEFAULT_ZONE: http://service-registry:8761/eureka/
+
+  vote-svc-db:
+    image: postgres:12.3
+    environment:
+      - POSTGRES_USER=siva
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=appdb
+    ports:
+      - "5434:5432"
+
+  votes-service:
+    build: ../votes-service
+    ports:
+      - "18082:8082"
+    restart: always
+    depends_on:
+      - vote-svc-db
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_DATASOURCE_URL: jdbc:postgresql://vote-svc-db:5432/appdb
+      SPRING_DATASOURCE_USERNAME: siva
+      SPRING_DATASOURCE_PASSWORD: secret
+      SPRING_ZIPKIN_ENABLED: true
+      SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
+      EUREKA_CLIENT_SERVICEURL_DEFAULT_ZONE: http://service-registry:8761/eureka/
+      APPLICATION_LOGSTASH_HOST: logstash
+
+  service-registry:
+    build: ../service-registry
+    ports:
+      - "18761:8761"
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_ZIPKIN_ENABLED: true
+
+  api-gateway:
+    build: ../api-gateway
+    ports:
+      - "19090:9090"
+    restart: always
+    depends_on:
+      - service-registry
+      - bookmarks-service
+      - votes-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_ZIPKIN_ENABLED: true
+      SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
+      EUREKA_CLIENT_SERVICEURL_DEFAULT_ZONE: http://service-registry:8761/eureka/
+      APPLICATION_LOGSTASH_HOST: logstash
+
+  bookmarks-ui:
+    build: ../bookmarks-ui
+    ports:
+      - "18080:8080"
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_ZIPKIN_ENABLED: true
+      SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
+      APPLICATION_LOGSTASH_HOST: logstash
+      APPLICATION_API_BASE_URL: http://api-gateway:9090
+      EUREKA_CLIENT_SERVICEURL_DEFAULT_ZONE: http://service-registry:8761/eureka/
+    depends_on:
+      - api-gateway
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    environment:
+      - STORAGE_TYPE=mem
+    ports:
+      - "9411:9411"

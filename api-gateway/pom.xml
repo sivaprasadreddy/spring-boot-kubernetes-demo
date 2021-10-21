@@ -11,7 +11,7 @@
     </parent>
     <groupId>com.sivalabs</groupId>
     <artifactId>api-gateway</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <name>api-gateway</name>
     <description>API Gateway</description>
     <properties>
@@ -19,9 +19,7 @@
         <spring-cloud.version>2020.0.3</spring-cloud.version>
         <!--<springdoc-openapi.version>1.5.11</springdoc-openapi.version>-->
         <springdoc-openapi.version>1.2.31</springdoc-openapi.version>
-        <spotless.version>2.7.0</spotless.version>
         <jib-maven-plugin.version>3.1.4</jib-maven-plugin.version>
-        <jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
        <dockerhub.username>sivaprasadreddy</dockerhub.username>
     </properties>
     <dependencies>
@@ -36,6 +34,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -93,101 +95,11 @@
                 <configuration>
                     <imageName>${dockerhub.username}/${project.artifactId}</imageName>
                     <pullPolicy>IF_NOT_PRESENT</pullPolicy>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
                 </configuration>
                 <executions>
                     <execution>
                         <goals>
                             <goal>build-info</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>pl.project13.maven</groupId>
-                <artifactId>git-commit-id-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>revision</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <failOnNoGitDirectory>false</failOnNoGitDirectory>
-                    <failOnUnableToExtractRepoInfo>false</failOnUnableToExtractRepoInfo>
-                    <includeOnlyProperties>
-                        <includeOnlyProperty>^git.commit.id.abbrev$</includeOnlyProperty>
-                        <includeOnlyProperty>^git.commit.id.describe$</includeOnlyProperty>
-                        <includeOnlyProperty>^git.branch$</includeOnlyProperty>
-                    </includeOnlyProperties>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
-                <configuration>
-                    <runOrder>alphabetical</runOrder>
-                    <reportsDirectory>${junit.utReportFolder}</reportsDirectory>
-                    <excludes>
-                        <exclude>**/*IT*</exclude>
-                        <exclude>**/*IntTest*</exclude>
-                        <exclude>**/*IntegrationTest*</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${maven-failsafe-plugin.version}</version>
-                <configuration>
-                    <classesDirectory>${project.build.outputDirectory}</classesDirectory>
-                    <runOrder>alphabetical</runOrder>
-                    <reportsDirectory>${junit.itReportFolder}</reportsDirectory>
-                    <includes>
-                        <include>**/*IT*</include>
-                        <include>**/*IntTest*</include>
-                        <include>**/*IntegrationTest*</include>
-                    </includes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>integration-test</id>
-                        <goals>
-                            <goal>integration-test</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>verify</id>
-                        <goals>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.diffplug.spotless</groupId>
-                <artifactId>spotless-maven-plugin</artifactId>
-                <version>${spotless.version}</version>
-                <configuration>
-                    <java>
-                        <googleJavaFormat>
-                            <version>1.8</version>
-                            <style>AOSP</style>
-                        </googleJavaFormat>
-                    </java>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>check</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -213,6 +125,26 @@
                             <port>9090</port>
                         </ports>
                     </container>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <failOnNoGitDirectory>false</failOnNoGitDirectory>
+                    <failOnUnableToExtractRepoInfo>false</failOnUnableToExtractRepoInfo>
+                    <includeOnlyProperties>
+                        <includeOnlyProperty>^git.commit.id.abbrev$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.commit.id.describe$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.branch$</includeOnlyProperty>
+                    </includeOnlyProperties>
                 </configuration>
             </plugin>
         </plugins>
