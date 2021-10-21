@@ -1,25 +1,3 @@
-spring:
-  cloud:
-    gateway:
-      routes:
-        - id: bookmarks-service
-          uri: http://bookmarks-service:8081
-          predicates:
-            - Path=/bookmarks/**
-          filters:
-            - RewritePath=/bookmarks/(?<path>.*), /$\{path}
-        - id: votes-service
-          uri: http://votes-service:8082
-          predicates:
-            - Path=/votes/**
-          filters:
-            - RewritePath=/votes/(?<path>.*), /$\{path}
-        - id: openapi
-          uri: http://localhost:${server.port}
-          predicates:
-            - Path=/v3/api-docs/**
-          filters:
-            - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
 eureka:
   client:
     serviceUrl:

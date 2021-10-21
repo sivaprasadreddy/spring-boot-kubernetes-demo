@@ -11,9 +11,6 @@ import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.reactive.config.CorsRegistry;
-import org.springframework.web.reactive.config.WebFluxConfigurer;
-import org.springframework.web.reactive.config.WebFluxConfigurerComposite;
 
 @SpringBootApplication
 @EnableEurekaClient
@@ -28,22 +25,6 @@ public class ApiGatewayApplication {
     public static void main(String[] args) {
         SpringApplication.run(ApiGatewayApplication.class, args);
     }
-
-    /*@Bean
-    public WebFluxConfigurer corsConfigurer() {
-        return new WebFluxConfigurerComposite() {
-
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry
-                    .addMapping("/**")
-                    .allowedMethods("*")
-                    .allowedHeaders("*")
-                    .allowedOriginPatterns("*")
-                    .allowCredentials(true);
-            }
-        };
-    }*/
 
     @Bean
     public List<GroupedOpenApi> apis(RouteDefinitionLocator locator) {
