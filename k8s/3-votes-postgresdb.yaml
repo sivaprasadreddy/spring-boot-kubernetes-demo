@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: vote-service-postgres-pv-claim
+  name: votes-service-postgres-pv-claim
 spec:
   accessModes:
     - ReadWriteOnce
@@ -13,10 +13,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: vote-service-postgres-svc
+  name: votes-service-postgres-svc
 spec:
   selector:
-    app: vote-service-postgres-pod
+    app: votes-service-postgres-pod
   ports:
     - port: 5432
       targetPort: 5432
@@ -24,17 +24,17 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: vote-service-postgres-deployment
+  name: votes-service-postgres-deployment
 spec:
   selector:
     matchLabels:
-      app: vote-service-postgres-pod
+      app: votes-service-postgres-pod
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: vote-service-postgres-pod
+        app: votes-service-postgres-pod
     spec:
       containers:
         - name: postgres
@@ -46,17 +46,17 @@ spec:
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: vote-service-secrets
+                  name: votes-service-secrets
                   key: postgres_username
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: vote-service-secrets
+                  name: votes-service-secrets
                   key: postgres_password
             - name: POSTGRES_DB
               valueFrom:
                 configMapKeyRef:
-                  name: vote-service-configmap
+                  name: votes-service-configmap
                   key: postgres_database
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata
@@ -67,4 +67,4 @@ spec:
       volumes:
         - name: postgres-storage
           persistentVolumeClaim:
-            claimName: vote-service-postgres-pv-claim
+            claimName: votes-service-postgres-pv-claim

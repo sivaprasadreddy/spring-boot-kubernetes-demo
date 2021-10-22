@@ -10,8 +10,8 @@ services:
     ports:
       - "5433:5432"
 
-  bookmark-service:
-    build: ../bookmark-service
+  bookmarks-service:
+    image: sivaprasadreddy/bookmarks-service
     ports:
       - "18081:8081"
     restart: always
@@ -25,8 +25,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: secret
       SPRING_ZIPKIN_ENABLED: true
       SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
-      APPLICATION_VOTE_SERVICE_URL: http://vote-service:8082
-      APPLICATION_LOGSTASH_HOST: logstash
+      APPLICATION_VOTE_SERVICE_URL: http://votes-service:8082
 
   vote-svc-db:
     image: postgres:12.3
@@ -37,8 +36,8 @@ services:
     ports:
       - "5434:5432"
 
-  vote-service:
-    build: ../vote-service
+  votes-service:
+    image: sivaprasadreddy/votes-service
     ports:
       - "18082:8082"
     restart: always
@@ -55,21 +54,20 @@ services:
       APPLICATION_LOGSTASH_HOST: logstash
 
   api-gateway:
-    build: ../api-gateway
+    image: sivaprasadreddy/api-gateway
     ports:
       - "19090:9090"
     restart: always
     depends_on:
-      - bookmark-service
-      - vote-service
+      - bookmarks-service
+      - votes-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_ZIPKIN_ENABLED: true
       SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
-      APPLICATION_LOGSTASH_HOST: logstash
 
   bookmarks-ui:
-    build: ../bookmarks-ui
+    image: sivaprasadreddy/bookmarks-ui
     ports:
       - "18080:8080"
     restart: always
@@ -77,22 +75,13 @@ services:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_ZIPKIN_ENABLED: true
       SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
-      APPLICATION_LOGSTASH_HOST: logstash
       APPLICATION_API_BASE_URL: http://api-gateway:9090
     depends_on:
       - api-gateway
   zipkin:
     image: openzipkin/zipkin
     container_name: zipkin
-    # Environment settings are defined here https://github.com/openzipkin/zipkin/tree/1.19.0/zipkin-server#environment-variables
     environment:
       - STORAGE_TYPE=mem
-      # Uncomment to disable scribe
-      # - SCRIBE_ENABLED=false
-      # Uncomment to enable self-tracing
-      # - SELF_TRACING_ENABLED=true
-      # Uncomment to enable debug logging
-      # - JAVA_OPTS=-Dlogging.level.zipkin=DEBUG
     ports:
-      # Port used for the Zipkin UI and HTTP Api
       - "9411:9411"

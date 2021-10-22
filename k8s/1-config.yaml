@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: bookmark-service-configmap
+  name: bookmarks-service-configmap
 data:
-  postgres_host: bookmark-service-postgres-svc
+  postgres_host: bookmarks-service-postgres-svc
   postgres_port: "5432"
   postgres_database: bookmarksdb
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: bookmark-service-secrets
+  name: bookmarks-service-secrets
 type: Opaque
 data:
   postgres_username: c2l2YQ== # siva
@@ -19,16 +19,16 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: vote-service-configmap
+  name: votes-service-configmap
 data:
-  postgres_host: vote-service-postgres-svc
+  postgres_host: votes-service-postgres-svc
   postgres_port: "5432"
   postgres_database: votesdb
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: vote-service-secrets
+  name: votes-service-secrets
 type: Opaque
 data:
   postgres_username: c2l2YQ== # siva

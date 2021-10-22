@@ -29,24 +29,25 @@ spec:
     spec:
       containers:
         - name: bookmarks-ui
-          image: sivaprasadreddy/bookmarks-ui:latest
+          image: sivaprasadreddy/bookmarks-ui
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: k8s
             - name: APPLICATION_API_BASE_URL
-              value: http://api.my.bookmarks.com:30099
+              value: http://api.mybookmarks.com:30099
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
               port: 8080
-            initialDelaySeconds: 10
+            initialDelaySeconds: 30
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
               port: 8080
-            initialDelaySeconds: 10
+            initialDelaySeconds: 30
           lifecycle:
             preStop:
               exec:

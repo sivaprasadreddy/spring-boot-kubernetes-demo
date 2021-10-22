@@ -6,7 +6,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    -  host: "my.bookmarks.com"
+    -  host: "mybookmarks.com"
        http:
          paths:
            - pathType: Prefix
@@ -17,7 +17,7 @@ spec:
                  port:
                    number: 8080
 
-    - host: "api.my.bookmarks.com"
+    - host: "api.mybookmarks.com"
       http:
         paths:
           - pathType: Prefix

@@ -29,7 +29,8 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: sivaprasadreddy/api-gateway:latest
+          image: sivaprasadreddy/api-gateway
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9090
           env:
@@ -39,14 +40,13 @@ spec:
             httpGet:
               path: /actuator/health/liveness
               port: 9090
-            initialDelaySeconds: 10
+            initialDelaySeconds: 30
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
               port: 9090
-            initialDelaySeconds: 10
+            initialDelaySeconds: 30
           lifecycle:
             preStop:
               exec:
                 command: [ "sh", "-c", "sleep 10" ]
-

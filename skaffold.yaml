@@ -4,22 +4,26 @@ metadata:
   name: spring-boot-kubernetes-demo
 build:
   artifacts:
-    - image: docker.io/sivaprasadreddy/vote-service
-      context: ./vote-service
-      buildpacks:
-        builder: paketobuildpacks/builder:base
-    - image: docker.io/sivaprasadreddy/bookmark-service
-      context: ./bookmark-service
-      buildpacks:
-        builder: paketobuildpacks/builder:base
+    - image: docker.io/sivaprasadreddy/votes-service
+      context: ./votes-service
+      jib: {}
+      #buildpacks:
+      #  builder: paketobuildpacks/builder:base
+    - image: docker.io/sivaprasadreddy/bookmarks-service
+      context: ./bookmarks-service
+      jib: {}
+      #buildpacks:
+      #  builder: paketobuildpacks/builder:base
     - image: docker.io/sivaprasadreddy/api-gateway
       context: ./api-gateway
-      buildpacks:
-        builder: paketobuildpacks/builder:base
+      jib: {}
+      #buildpacks:
+      #  builder: paketobuildpacks/builder:base
     - image: docker.io/sivaprasadreddy/bookmarks-ui
       context: ./bookmarks-ui
-      buildpacks:
-        builder: paketobuildpacks/builder:base
+      jib: {}
+      #buildpacks:
+      #  builder: paketobuildpacks/builder:base
 
 deploy:
   kubectl:
@@ -27,8 +31,8 @@ deploy:
       - k8s/1-config.yaml
       - k8s/2-bookmarks-postgresdb.yaml
       - k8s/3-votes-postgresdb.yaml
-      - k8s/4-bookmark-service-app.yaml
-      - k8s/5-vote-service-app.yaml
+      - k8s/4-votes-service-app.yaml
+      - k8s/5-bookmarks-service-app.yaml
       - k8s/6-api-gateway.yaml
       - k8s/7-bookmarks-ui-app.yaml
       - k8s/8-ingress.yaml
