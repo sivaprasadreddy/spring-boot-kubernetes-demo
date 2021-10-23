@@ -10,7 +10,7 @@
     <name>spring-boot-kubernetes-demo</name>
 
     <modules>
-        <module>votes-service</module>
+        <module>url-metadata-service</module>
         <module>bookmarks-service</module>
         <module>api-gateway</module>
         <module>bookmarks-ui</module>

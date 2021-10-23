@@ -10,13 +10,26 @@ services:
     ports:
       - "5433:5432"
 
+  url-metadata-service:
+    build: ../url-metadata-service
+    image: sivaprasadreddy/url-metadata-service
+    ports:
+      - "18082:8082"
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_ZIPKIN_ENABLED: true
+      SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
+
   bookmarks-service:
+    build: ../bookmarks-service
     image: sivaprasadreddy/bookmarks-service
     ports:
       - "18081:8081"
     restart: always
     depends_on:
       - bookmark-svc-db
+      - url-metadata-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
@@ -25,48 +38,24 @@ services:
       SPRING_DATASOURCE_PASSWORD: secret
       SPRING_ZIPKIN_ENABLED: true
       SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
-      APPLICATION_VOTE_SERVICE_URL: http://votes-service:8082
-
-  vote-svc-db:
-    image: postgres:12.3
-    environment:
-      - POSTGRES_USER=siva
-      - POSTGRES_PASSWORD=secret
-      - POSTGRES_DB=appdb
-    ports:
-      - "5434:5432"
-
-  votes-service:
-    image: sivaprasadreddy/votes-service
-    ports:
-      - "18082:8082"
-    restart: always
-    depends_on:
-      - vote-svc-db
-    environment:
-      SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
-      SPRING_DATASOURCE_URL: jdbc:postgresql://vote-svc-db:5432/appdb
-      SPRING_DATASOURCE_USERNAME: siva
-      SPRING_DATASOURCE_PASSWORD: secret
-      SPRING_ZIPKIN_ENABLED: true
-      SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
-      APPLICATION_LOGSTASH_HOST: logstash
+      APPLICATION_URL_METADATA_SERVICE_URL: http://url-metadata-service:8082
 
   api-gateway:
+    build: ../api-gateway
     image: sivaprasadreddy/api-gateway
     ports:
       - "19090:9090"
     restart: always
     depends_on:
       - bookmarks-service
-      - votes-service
+      - url-metadata-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_ZIPKIN_ENABLED: true
       SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
 
   bookmarks-ui:
+    build: ../bookmarks-ui
     image: sivaprasadreddy/bookmarks-ui
     ports:
       - "18080:8080"
@@ -75,7 +64,7 @@ services:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_ZIPKIN_ENABLED: true
       SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
-      APPLICATION_API_BASE_URL: http://api-gateway:9090
+      APPLICATION_API_BASE_URL: http://localhost:19090
     depends_on:
       - api-gateway
   zipkin:

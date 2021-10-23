@@ -2,7 +2,7 @@ new Vue({
   el: '#app',
   data: {
     bookmarks: [],
-    newBookmark: {},
+    newBookmark: { url:'', title:''},
     error: null
   },
   created: function () {
@@ -19,10 +19,30 @@ new Vue({
         self.error = "Failed to load bookmarks";
       });
     },
-
+    urlChangeHandler() {
+      let self = this;
+      console.log(self.newBookmark)
+      if(self.newBookmark.title !== undefined && self.newBookmark.title !== '') {
+        return;
+      }
+      $.ajax({
+        type: "GET",
+        url: apiBaseUrl+'/url-metadata/api/v1/url-metadata?url='+self.newBookmark.url,
+        success: function (response) {
+          console.log("urlChangeHandler:", response);
+          self.newBookmark.title= response.title;
+        },
+        error: function (err) {
+          console.log("Error: ", err)
+        }
+      });
+    },
     saveBookmark() {
       let self = this;
-
+      if(self.newBookmark.url === '') {
+        self.error = "Please enter URL";
+        return;
+      }
       $.ajax({
         type: "POST",
         url: apiBaseUrl+'/bookmarks/api/v1/bookmarks',
@@ -44,7 +64,7 @@ new Vue({
       console.log('up vote:' + bookmarkId);
       $.ajax({
         type: "PUT",
-        url: apiBaseUrl+'/votes/api/v1/bookmarks/' + bookmarkId + '/votes/up',
+        url: apiBaseUrl+'/bookmarks/api/v1/bookmarks/' + bookmarkId + '/votes/up',
         contentType: "application/json",
         success: function () {
           self.error = null;
@@ -61,7 +81,7 @@ new Vue({
       console.log('down vote:' + bookmarkId);
       $.ajax({
         type: "PUT",
-        url: apiBaseUrl+'/votes/api/v1/bookmarks/' + bookmarkId + '/votes/down',
+        url: apiBaseUrl+'/bookmarks/api/v1/bookmarks/' + bookmarkId + '/votes/down',
         contentType: "application/json",
         success: function () {
           self.error = null;

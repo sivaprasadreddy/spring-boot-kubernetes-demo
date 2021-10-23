@@ -2,15 +2,15 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: bookmarks_route
-          uri: http://bookmark-service-svc:8081
+        - id: bookmarks-service
+          uri: http://bookmarks-service-svc:8081
           predicates:
-            - Path=/bookmarkssvc/**
+            - Path=/bookmarks/**
           filters:
             - StripPrefix=1
-        - id: votes_route
-          uri: http://vote-service-svc:8082
+        - id: url-metadata-service
+          uri: http://url-metadata-service-svc:8082
           predicates:
-            - Path=/votessvc/**
+            - Path=/url-metadata/**
           filters:
             - StripPrefix=1

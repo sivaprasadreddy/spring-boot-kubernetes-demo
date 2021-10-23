@@ -4,6 +4,8 @@ create table bookmarks (
     id bigint DEFAULT nextval('bookmark_id_seq') not null,
     title varchar(500) not null,
     url varchar(1000) not null,
+    up_votes int not null,
+    down_votes int not null,
     created_at timestamp,
     updated_at timestamp,
     primary key (id)

@@ -33,12 +33,17 @@ public class Bookmark {
     private Long id;
 
     @Column(nullable = false)
-    @NotEmpty(message = "Title cannot be empty")
     private String title;
 
     @Column(nullable = false)
     @NotEmpty(message = "URL cannot be empty")
     private String url;
+
+    @Column
+    private Integer upVotes = 0;
+
+    @Column
+    private Integer downVotes = 0;
 
     @Column(updatable = false)
     private LocalDateTime createdAt;

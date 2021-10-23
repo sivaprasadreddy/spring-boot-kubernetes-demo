@@ -15,12 +15,12 @@ spring:
             - Path=/bookmarks/**
           filters:
             - RewritePath=/bookmarks/(?<path>.*), /$\{path}
-        - id: votes-service
+        - id: url-metadata-service
           uri: http://localhost:8082
           predicates:
-            - Path=/votes/**
+            - Path=/url-metadata/**
           filters:
-            - RewritePath=/votes/(?<path>.*), /$\{path}
+            - RewritePath=/url-metadata/(?<path>.*), /$\{path}
         - id: openapi
           uri: http://localhost:${server.port}
           predicates:

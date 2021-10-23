@@ -4,8 +4,8 @@ metadata:
   name: spring-boot-kubernetes-demo
 build:
   artifacts:
-    - image: docker.io/sivaprasadreddy/votes-service
-      context: ./votes-service
+    - image: docker.io/sivaprasadreddy/url-metadata-service
+      context: ./url-metadata-service
       jib: {}
       #buildpacks:
       #  builder: paketobuildpacks/builder:base
@@ -30,8 +30,7 @@ deploy:
     manifests:
       - k8s/1-config.yaml
       - k8s/2-bookmarks-postgresdb.yaml
-      - k8s/3-votes-postgresdb.yaml
-      - k8s/4-votes-service-app.yaml
+      - k8s/4-url-metadata-service-app.yaml
       - k8s/5-bookmarks-service-app.yaml
       - k8s/6-api-gateway.yaml
       - k8s/7-bookmarks-ui-app.yaml

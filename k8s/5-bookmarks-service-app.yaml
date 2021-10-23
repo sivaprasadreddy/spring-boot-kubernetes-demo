@@ -36,8 +36,8 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: k8s
-            - name: APPLICATION_VOTE_SERVICE_URL
-              value: http://votes-service-svc:8082
+            - name: APPLICATION_URL_METADATA_SERVICE_URL
+              value: http://url-metadata-service-svc:8082
             - name: DB_HOST
               valueFrom:
                 configMapKeyRef:

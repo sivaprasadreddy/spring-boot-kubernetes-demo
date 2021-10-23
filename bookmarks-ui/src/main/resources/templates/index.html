@@ -34,18 +34,20 @@
                       cssStyle="width: 800px; margin: 0 auto;">
                     <div class="form-group">
                         <div class="col-sm-10">
+                            <input type="text" id="url" name="url"
+                                   v-model="newBookmark.url"
+                                   @change="urlChangeHandler"
+                                   class="form-control" placeholder="URL" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10">
                             <input type="text" id="title" name="title"
                                    v-model="newBookmark.title"
                                    class="form-control" placeholder="Title" />
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="col-sm-10">
-                            <input type="text" id="url" name="url"
-                                   v-model="newBookmark.url"
-                                   class="form-control" placeholder="URL" />
-                        </div>
-                    </div>
+
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-4">
                             <input type="submit" class="btn btn-primary pull-right"

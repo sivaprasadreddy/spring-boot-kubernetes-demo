@@ -37,7 +37,7 @@ public class Initializer implements CommandLineRunner {
             for (String line : lines) {
                 String[] tokens = line.split("\\|");
                 Bookmark bookmark =
-                        new Bookmark(null, tokens[1], tokens[0], LocalDateTime.now(), null);
+                        new Bookmark(null, tokens[1], tokens[0], 0,0, LocalDateTime.now(), null);
                 bookmarks.add(bookmark);
             }
             bookmarkRepository.saveAll(bookmarks);

@@ -16,20 +16,3 @@ data:
   postgres_username: c2l2YQ== # siva
   postgres_password: c2l2YWxhYnM= # sivalabs
 ---
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: votes-service-configmap
-data:
-  postgres_host: votes-service-postgres-svc
-  postgres_port: "5432"
-  postgres_database: votesdb
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: votes-service-secrets
-type: Opaque
-data:
-  postgres_username: c2l2YQ== # siva
-  postgres_password: c2l2YWxhYnM= # sivalabs
