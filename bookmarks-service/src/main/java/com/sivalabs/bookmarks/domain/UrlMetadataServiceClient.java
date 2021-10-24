@@ -28,6 +28,7 @@ public class UrlMetadataServiceClient {
             }
         } catch (Exception e) {
             log.error("Error while getting metadata for URL: " + url, e);
+            metadata.setTitle(url);
         }
         return metadata;
     }

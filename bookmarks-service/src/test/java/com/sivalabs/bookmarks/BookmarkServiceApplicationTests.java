@@ -66,14 +66,14 @@ class BookmarkServiceApplicationTests {
     }
 
     @Test
-    void shouldReturnBadRequestWhenBookmarkTitleIsBlank() throws Exception {
+    void shouldAllowRequestWithBookmarkTitleIsBlank() throws Exception {
         Bookmark bookmark = new Bookmark(null, "", "http://hello.com", 0,0,LocalDateTime.now(), null);
         this.mockMvc
                 .perform(
                         post("/api/v1/bookmarks")
                                 .contentType(APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(bookmark)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isCreated());
     }
 
     @Test
