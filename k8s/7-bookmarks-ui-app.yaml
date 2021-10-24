@@ -37,7 +37,7 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: k8s
             - name: APPLICATION_API_BASE_URL
-              value: http://api.mybookmarks.com:30099
+              value: http://api.mybookmarks.com
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness

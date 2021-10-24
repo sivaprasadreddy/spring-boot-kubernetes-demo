@@ -1,6 +1,5 @@
 # SpringBoot Kubernetes Demo
 
-
 ## Minikube Setup
 
 ```shell
@@ -14,8 +13,8 @@ $ minikube ip
 Add host entries in /etc/hosts files
 
 ```shell
-192.168.99.105 my.bookmarks.com
-192.168.99.105 api.my.bookmarks.com
+192.168.99.105 mybookmarks.com
+192.168.99.105 api.mybookmarks.com
 ```
 
 Override API Path:
@@ -24,7 +23,7 @@ $ minikube ip
 192.168.99.105
 
 Browser Console:
-localStorage.setItem("API_BASE_URL", "http://192.168.99.105:30099");
+localStorage.setItem("API_BASE_URL", "http://api.mybookmarks.com");
 ```
 
 ```shell

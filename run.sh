@@ -1,7 +1,7 @@
 #!/bin/bash
 
 declare project_dir=$(dirname $0)
-declare project_version='0.0.2'
+declare project_version='0.0.1'
 declare dc_app=${project_dir}/docker/docker-compose.yml
 
 

@@ -6,12 +6,12 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.5</version>
+        <version>2.5.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.sivalabs</groupId>
     <artifactId>bookmarks-ui</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.1</version>
     <name>bookmarks-ui</name>
     <description>BookmarksUI</description>
     <properties>
@@ -122,8 +122,8 @@
                 <version>${jib-maven-plugin.version}</version>
                 <configuration>
                     <from>
-                        <!--<image>gcr.io/distroless/java:11</image>-->
-                        <image>openjdk:11-jdk-slim</image>
+                        <image>gcr.io/distroless/java:11</image>
+                        <!--<image>openjdk:11-jdk-slim</image>-->
                     </from>
                     <to>
                         <image>${dockerhub.username}/${project.artifactId}</image>
