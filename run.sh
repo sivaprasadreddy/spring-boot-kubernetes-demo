@@ -22,6 +22,7 @@ function restart() {
     stop
     start
 }
+
 function build_api() {
     ./mvnw clean package -DskipTests
 }
@@ -52,30 +53,12 @@ function pushImages() {
     docker push sivaprasadreddy/bookmarks-ui --all-tags
 }
 
-function k8sDeploy() {
-    kubectl apply -f k8s/1-config.yaml
-    sleep 3
-    kubectl apply -f k8s/2-bookmarks-postgresdb.yaml
-    sleep 3
-    kubectl apply -f k8s/4-url-metadata-service-app.yaml
-    sleep 3
-    kubectl apply -f k8s/5-bookmarks-service-app.yaml
-    sleep 3
-    kubectl apply -f k8s/6-api-gateway.yaml
-    sleep 3
-    kubectl apply -f k8s/7-bookmarks-ui-app.yaml
-    sleep 3
-    kubectl apply -f k8s/8-ingress.yaml
+function k8s_deploy() {
+    kubectl apply -f k8s
 }
 
-function k8sUndeploy() {
-    kubectl delete -f k8s/8-ingress.yaml
-    kubectl delete -f k8s/7-bookmarks-ui-app.yaml
-    kubectl delete -f k8s/6-api-gateway.yaml
-    kubectl delete -f k8s/5-bookmarks-service-app.yaml
-    kubectl delete -f k8s/4-url-metadata-service-app.yaml
-    kubectl delete -f k8s/2-bookmarks-postgresdb.yaml
-    kubectl delete -f k8s/1-config.yaml
+function k8s_undeploy() {
+    kubectl delete -f k8s
 }
 
 action="start"

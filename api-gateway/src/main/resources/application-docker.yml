@@ -7,10 +7,16 @@ spring:
           predicates:
             - Path=/bookmarks/**
           filters:
-            - StripPrefix=1
+            - RewritePath=/bookmarks/(?<path>.*), /$\{path}
         - id: url-metadata-service
           uri: http://url-metadata-service:8082
           predicates:
             - Path=/url-metadata/**
           filters:
-            - StripPrefix=1
+            - RewritePath=/url-metadata/(?<path>.*), /$\{path}
+        - id: openapi
+          uri: http://localhost:${server.port}
+          predicates:
+            - Path=/v3/api-docs/**
+          filters:
+            - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
